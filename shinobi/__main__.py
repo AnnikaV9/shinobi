@@ -1,5 +1,5 @@
 # author: AnnikaV9
-# description: shinobi is a chat logger for hack.chat
+# description: chat logger for hack.chat instances
 
 # import modules
 import asyncio
