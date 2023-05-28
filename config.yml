@@ -1,0 +1,4 @@
+channel: <channel>
+nick: RANDOM
+password: <trip password>
+server: wss://hack.chat/chat-ws

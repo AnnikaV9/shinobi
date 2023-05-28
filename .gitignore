@@ -1,0 +1,4 @@
+.venv
+shinobi/__pycache__
+logs/*
+!logs/.gitkeep
