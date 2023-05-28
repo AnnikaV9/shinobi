@@ -18,7 +18,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 def load_config():
     with open("config.yml", "r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
-    
+
     if config["nick"] == "RANDOM":
         config["nick"] = str(random.randint(1000, 9999))
 
@@ -45,17 +45,17 @@ async def receive(ws, logger):
         if resp["cmd"] == "chat":
             resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
             logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"]))
-        
+
         elif resp["cmd"] == "emote":
             resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
             logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"]))
 
         elif resp["cmd"] == "onlineAdd":
             logger.info("{} joined".format(resp["nick"]))
-        
+
         elif resp["cmd"] == "onlineRemove":
             logger.info("{} left".format(resp["nick"]))
-        
+
         elif resp["cmd"] == "onlineSet":
             logger.info("Online: {}".format(", ".join(resp["nicks"])))
 
@@ -69,18 +69,17 @@ if __name__ == "__main__":
         level=logging.INFO
     )
     logger = logging.getLogger()
-    
-    exit = False
-    while not exit:
+
+    while True:
         try:
             asyncio.run(main(config["nick"], config["channel"], config["server"], logger))
-    
+
         except KeyboardInterrupt:
             logger.info("Connection closed: KeyboardInterrupt")
-            exit = True
+            raise SystemExit
 
         # reconnect on exception after 10 seconds
-        except BaseException as error:
+        except Exception as error:
             logger.exception(f"Connection closed: {error}")
             time.sleep(10)
             config = load_config()
