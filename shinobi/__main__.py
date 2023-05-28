@@ -20,7 +20,7 @@ def load_config():
         config = yaml.safe_load(config_file)
     
     if config["nick"] == "RANDOM":
-        config["nick"] = "{}".format(random.randint(1000, 9999))
+        config["nick"] = str(random.randint(1000, 9999))
 
     config["nick"] = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
     return config
