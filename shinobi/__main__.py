@@ -83,3 +83,4 @@ if __name__ == "__main__":
         except BaseException as error:
             logger.exception(f"Connection closed: {error}")
             time.sleep(10)
+            config = load_config()
