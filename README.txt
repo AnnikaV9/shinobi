@@ -10,7 +10,7 @@ Run shinobi:
     $ python3 shinobi
 
 Notes:
-    - Log files are created in log/ and named
+    - Log files are created in logs/ and named
       according to the channel they are deployed
       to.
     - Setting the 'nick' option to 'RANDOM' will
