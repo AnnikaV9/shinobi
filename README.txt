@@ -3,9 +3,15 @@ Chat logger for hack.chat instances.
 
 Setup:
 
-$ pip install -r requirements.txt
-$ vim config.yml
-$ python shinobi
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+(venv) $ pip install -r requirements.txt
+
+
+Start:
+
+$ source .venv/bin/activate
+(venv) $ python shinobi
 
 
 Notes:
