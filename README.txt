@@ -13,6 +13,7 @@ Notes:
 - Log files are created in logs/ and named according to the channel deployed to.
 - Setting the 'nick' option to 'RANDOM' will tell the logger to generate a random numerical nickname.
 - Shinobi will restart itself on exceptions after a delay of 10 seconds (Unless it's a KeyboardInterrupt)
+- Linebreaks in messages are replaced with '<LB>'
 
 
 Example log:
