@@ -5,13 +5,13 @@ Setup:
 
 $ python3 -m venv .venv
 $ source .venv/bin/activate
-(venv) $ pip install -r requirements.txt
+(.venv) $ pip install -r requirements.txt
 
 
 Start:
 
 $ source .venv/bin/activate
-(venv) $ python shinobi
+(.venv) $ python shinobi
 
 
 Notes:
