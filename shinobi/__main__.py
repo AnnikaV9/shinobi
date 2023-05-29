@@ -10,6 +10,7 @@ import yaml
 import logging
 import time
 import random
+import sys
 
 # use uvloop for faster event loop
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -23,6 +24,12 @@ def load_config() -> dict:
         config["nick"]: str = str(random.randint(1000, 9999))
 
     config["nick"]: str = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
+    
+    if len(sys.argv) < 2:
+        print("Usage: python shinobi <channel>")
+        raise SystemExit
+
+    config["channel"]: str = sys.argv[1]
     return config
 
 # connect to the server and start coroutines

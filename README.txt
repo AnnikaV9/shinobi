@@ -12,7 +12,7 @@ $ source .venv/bin/activate
 Start:
 
 $ source .venv/bin/activate
-(.venv) $ python shinobi
+(.venv) $ python shinobi <channel>
 
 
 Notes:
