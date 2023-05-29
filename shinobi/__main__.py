@@ -29,16 +29,16 @@ def load_config() -> dict:
 async def main(nick: str, channel: str, server: str, logger: object) -> None:
     async with websockets.connect(server) as ws:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
-        await asyncio.gather(ping(ws), receive(ws, logger))
+        await asyncio.gather(ping_loop(ws), receive_loop(ws, logger))
 
 # send a ping every 60 seconds
-async def ping(ws: object) -> None:
+async def ping_loop(ws: object) -> None:
     while True:
         await asyncio.sleep(60)
         await ws.send(json.dumps({"cmd": "ping"}))
 
 # receive messages and log them
-async def receive(ws: object, logger: object) -> None:
+async def receive_loop(ws: object, logger: object) -> None:
     while True:
         resp: str = await ws.recv()
         resp: dict = json.loads(resp)
@@ -58,6 +58,7 @@ async def receive(ws: object, logger: object) -> None:
 
         elif resp["cmd"] == "onlineSet":
             logger.info("Online: {}".format(", ".join(resp["nicks"])))
+            print("Connected to channel: {}".format(resp["channel"]))
 
 # initialize logger and start main coroutine
 if __name__ == "__main__":
