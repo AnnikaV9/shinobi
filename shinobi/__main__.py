@@ -32,13 +32,13 @@ async def main(nick: str, channel: str, server: str, logger: object) -> None:
         await asyncio.gather(ping(ws), receive(ws, logger))
 
 # send a ping every 60 seconds
-async def ping(ws) -> None:
+async def ping(ws: object) -> None:
     while True:
         await asyncio.sleep(60)
         await ws.send(json.dumps({"cmd": "ping"}))
 
 # receive messages and log them
-async def receive(ws, logger) -> None:
+async def receive(ws: object, logger: object) -> None:
     while True:
         resp: str = await ws.recv()
         resp: dict = json.loads(resp)
