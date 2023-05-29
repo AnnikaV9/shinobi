@@ -6,6 +6,7 @@ Setup:
 $ python3 -m venv .venv
 $ source .venv/bin/activate
 (.venv) $ pip install -r requirements.txt
+- Edit config.yml with your preferred editor
 
 
 Start:
