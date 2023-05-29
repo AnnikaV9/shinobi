@@ -20,7 +20,7 @@ Notes:
 - Shinobi is asynchronous and can join multiple channels at once.
 - Each join is delayed slightly (30 seconds by default) to avoid being ratelimited.
 - Log files are created in logs/ and named according to the channels deployed to.
-- Setting the 'nick' option to 'RANDOM' will tell the logger to generate a random numeric nickname.
+- Setting the 'nick' option to 'RANDOM' will generate a random numeric nickname.
 - Linebreaks in messages are replaced with '<LB>'
 
 
