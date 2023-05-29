@@ -16,7 +16,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 # load configuration from config.yml
 def load_config() -> dict:
-    with open("config.yml", "r", encoding="utf-8") as config_file: object:
+    with open("config.yml", "r", encoding="utf-8") as config_file:
         config: dict = yaml.safe_load(config_file)
 
     if config["nick"] == "RANDOM":
@@ -27,7 +27,7 @@ def load_config() -> dict:
 
 # connect to the server and start coroutines
 async def main(nick: str, channel: str, server: str, logger: object) -> None:
-    async with websockets.connect(server) as ws: object:
+    async with websockets.connect(server) as ws:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping(ws), receive(ws, logger))
 
