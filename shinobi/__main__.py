@@ -1,7 +1,6 @@
 # author: AnnikaV9
 # description: chat logger for hack.chat instances
 
-# import modules
 import asyncio
 import uvloop
 import websockets
@@ -10,12 +9,10 @@ import yaml
 import logging
 import time
 import random
-import sys
+import atexit
 
-# use uvloop for faster event loop
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
-# load configuration from config.yml
 def load_config() -> dict:
     with open("config.yml", "r", encoding="utf-8") as config_file:
         config: dict = yaml.safe_load(config_file)
@@ -25,26 +22,37 @@ def load_config() -> dict:
 
     config["nick"]: str = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
     
-    if len(sys.argv) < 2:
-        print("Usage: python shinobi <channel>")
-        raise SystemExit
-
-    config["channel"]: str = sys.argv[1]
     return config
 
-# connect to the server and start coroutines
-async def main(nick: str, channel: str, server: str, logger: object) -> None:
+def create_logger(name, log_file) -> object:
+    formatter: object = logging.Formatter("%(asctime)s | %(message)s")
+    handler: object = logging.FileHandler(log_file)        
+    handler.setFormatter(formatter)
+    logger: object = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+    logger.propagate = False
+    return logger
+
+async def connection(nick: str, channel: str, channel_no: int, server: str) -> None:
+    logger: object = create_logger(channel, f"logs/{channel}.log")
+    logger_objects.append(logger)
+
+    if channel_no != 0:
+        await asyncio.sleep(channel_no * config["join_delay"])
+
     async with websockets.connect(server) as ws:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping_loop(ws), receive_loop(ws, logger))
+        
+async def main(nick: str, channels: str, server: list) -> None:
+    await asyncio.gather(*[connection(nick, channel, channels.index(channel) , server) for channel in channels])
 
-# send a ping every 60 seconds
 async def ping_loop(ws: object) -> None:
     while True:
         await asyncio.sleep(60)
         await ws.send(json.dumps({"cmd": "ping"}))
 
-# receive messages and log them
 async def receive_loop(ws: object, logger: object) -> None:
     while True:
         resp: str = await ws.recv()
@@ -67,27 +75,14 @@ async def receive_loop(ws: object, logger: object) -> None:
             logger.info("Online: {}".format(", ".join(resp["nicks"])))
             print("Connected to channel: {}".format(resp["channel"]))
 
-# initialize logger and start main coroutine
 if __name__ == "__main__":
     config: dict = load_config()
-    logging.basicConfig(
-        format="%(asctime)s | %(message)s",
-        filename="logs/{}.log".format(config["channel"]),
-        filemode="a",
-        level=logging.INFO
-    )
-    logger: object = logging.getLogger()
+    logging.basicConfig(filemode="a")
+    logger_objects: list = []
+    atexit.register(lambda: [logger.info("Connection closed") for logger in logger_objects])
 
-    while True:
-        try:
-            asyncio.run(main(config["nick"], config["channel"], config["server"], logger))
-
-        except KeyboardInterrupt:
-            logger.info("Connection closed: KeyboardInterrupt")
-            raise SystemExit
-
-        # reconnect on exception after 10 seconds
-        except Exception as error:
-            logger.exception(f"Connection closed: {error}")
-            time.sleep(10)
-            config: dict = load_config()
+    try:
+        asyncio.run(main(config["nick"], config["channels"], config["server"]))
+    
+    except KeyboardInterrupt:
+        raise SystemExit

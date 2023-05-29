@@ -12,14 +12,15 @@ $ source .venv/bin/activate
 Start:
 
 $ source .venv/bin/activate
-(.venv) $ python shinobi <channel>
+(.venv) $ python shinobi
 
 
 Notes:
 
-- Log files are created in logs/ and named according to the channel deployed to.
+- Shinobi is asynchronous and can join multiple channels at once.
+- Each join is delayed slightly (30 seconds by default) to avoid being ratelimited.
+- Log files are created in logs/ and named according to the channels deployed to.
 - Setting the 'nick' option to 'RANDOM' will tell the logger to generate a random numerical nickname.
-- Shinobi will restart itself on exceptions after a delay of 10 seconds (Unless it's a KeyboardInterrupt)
 - Linebreaks in messages are replaced with '<LB>'
 
 
@@ -31,4 +32,4 @@ $ cat logs/testchannel.log
 2023-05-29 11:01:17,334 | [NOTRIP][anakin] @anakin is gonna sleep
 2023-05-29 11:01:29,676 | anakin left
 2023-05-29 11:01:34,218 | toe joined
-2023-05-29 11:01:40,774 | Connection closed: KeyboardInterrupt
+2023-05-29 11:01:40,774 | Connection closed
