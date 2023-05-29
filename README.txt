@@ -10,7 +10,7 @@ $ python shinobi
 
 Notes:
 
-- Log files are created in logs/ and named according to the channel they are deployed to.
+- Log files are created in logs/ and named according to the channel deployed to.
 
 - Setting the 'nick' option to 'RANDOM' will tell the logger to generate a random numerical nickname.
 
