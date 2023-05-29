@@ -21,12 +21,11 @@ def load_config() -> dict:
         config["nick"]: str = str(random.randint(1000, 9999))
 
     config["nick"]: str = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
-    
     return config
 
 def create_logger(name, log_file) -> object:
     formatter: object = logging.Formatter("%(asctime)s | %(message)s")
-    handler: object = logging.FileHandler(log_file)        
+    handler: object = logging.FileHandler(log_file)
     handler.setFormatter(formatter)
     logger: object = logging.getLogger(name)
     logger.setLevel(logging.INFO)
@@ -44,7 +43,7 @@ async def connection(nick: str, channel: str, channel_no: int, server: str) -> N
     async with websockets.connect(server) as ws:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping_loop(ws), receive_loop(ws, logger))
-        
+
 async def main(nick: str, channels: str, server: list) -> None:
     await asyncio.gather(*[connection(nick, channel, channels.index(channel) , server) for channel in channels])
 
@@ -83,6 +82,6 @@ if __name__ == "__main__":
 
     try:
         asyncio.run(main(config["nick"], config["channels"], config["server"]))
-    
+
     except KeyboardInterrupt:
         raise SystemExit
