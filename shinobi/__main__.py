@@ -15,33 +15,33 @@ import random
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 # load configuration from config.yml
-def load_config():
-    with open("config.yml", "r", encoding="utf-8") as config_file:
-        config = yaml.safe_load(config_file)
+def load_config() -> dict:
+    with open("config.yml", "r", encoding="utf-8") as config_file: object:
+        config: dict = yaml.safe_load(config_file)
 
     if config["nick"] == "RANDOM":
-        config["nick"] = str(random.randint(1000, 9999))
+        config["nick"]: str = str(random.randint(1000, 9999))
 
-    config["nick"] = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
+    config["nick"]: str = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
     return config
 
-# connect to server and start coroutines
-async def main(nick, channel, server, logger):
-    async with websockets.connect(server) as ws:
+# connect to the server and start coroutines
+async def main(nick: str, channel: str, server: str, logger: object) -> None:
+    async with websockets.connect(server) as ws: object:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping(ws), receive(ws, logger))
 
-# send ping every 60 seconds
-async def ping(ws):
+# send a ping every 60 seconds
+async def ping(ws) -> None:
     while True:
         await asyncio.sleep(60)
         await ws.send(json.dumps({"cmd": "ping"}))
 
 # receive messages and log them
-async def receive(ws, logger):
+async def receive(ws, logger) -> None:
     while True:
-        resp = await ws.recv()
-        resp = json.loads(resp)
+        resp: str = await ws.recv()
+        resp: dict = json.loads(resp)
         if resp["cmd"] == "chat":
             resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
             logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"]))
@@ -61,14 +61,14 @@ async def receive(ws, logger):
 
 # initialize logger and start main coroutine
 if __name__ == "__main__":
-    config = load_config()
+    config: dict = load_config()
     logging.basicConfig(
         format="%(asctime)s | %(message)s",
         filename="logs/{}.log".format(config["channel"]),
         filemode="a",
         level=logging.INFO
     )
-    logger = logging.getLogger()
+    logger: object = logging.getLogger()
 
     while True:
         try:
@@ -82,4 +82,4 @@ if __name__ == "__main__":
         except Exception as error:
             logger.exception(f"Connection closed: {error}")
             time.sleep(10)
-            config = load_config()
+            config: dict = load_config()
