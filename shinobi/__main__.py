@@ -23,7 +23,7 @@ def load_config() -> dict:
     config["nick"]: str = "{}#{}".format(config["nick"], config["password"]) if config["password"] else config["nick"]
     return config
 
-def create_logger(name, log_file) -> object:
+def create_logger(name: str, log_file: str) -> object:
     formatter: object = logging.Formatter("%(asctime)s | %(message)s")
     handler: object = logging.FileHandler(log_file)
     handler.setFormatter(formatter)
@@ -44,7 +44,7 @@ async def connection(nick: str, channel: str, channel_no: int, server: str) -> N
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping_loop(ws), receive_loop(ws, logger))
 
-async def main(nick: str, channels: str, server: list) -> None:
+async def main(nick: str, channels: list, server: list) -> None:
     await asyncio.gather(*[connection(nick, channel, channels.index(channel) , server) for channel in channels])
 
 async def ping_loop(ws: object) -> None:
