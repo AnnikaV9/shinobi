@@ -17,7 +17,7 @@ $ source .venv/bin/activate
 
 Notes:
 
-- Shinobi is asynchronous and can join multiple channels at once.
+- Shinobi is asynchronous and can log multiple channels concurrently on a single thread.
 - Each join is delayed slightly (30 seconds by default) to avoid being ratelimited.
 - Log files are created in logs/ and named according to the channels deployed to.
 - Setting the 'nick' option to 'RANDOM' will generate a random numeric nickname.
