@@ -88,7 +88,7 @@ if __name__ == "__main__":
     atexit.register(lambda: [logger.info("Connection closed") for logger in logger_objects])
 
     try:
-        asyncio.run(main(config["nick"], config["channels"], config["server"]))
+        asyncio.run(main(config["nick"], list(dict.fromkeys(config["channels"])), config["server"]))
 
     except KeyboardInterrupt:
         raise SystemExit

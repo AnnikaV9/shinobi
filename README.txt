@@ -1,4 +1,4 @@
-Chat logger for hack.chat instances.
+Asynchronous multi-channel chat logger for hack.chat instances.
 
 
 Setup:
