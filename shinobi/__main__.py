@@ -60,23 +60,25 @@ async def receive_loop(ws: object, logger: object) -> None:
     while True:
         resp: str = await ws.recv()
         resp: dict = json.loads(resp)
-        if resp["cmd"] == "chat":
-            resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
-            logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
+        if "cmd" in resp:
+            match resp["cmd"]:
+                case "chat":
+                    resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
+                    logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
 
-        elif resp["cmd"] == "emote":
-            resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
-            logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
+                case "emote":
+                    resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
+                    logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
 
-        elif resp["cmd"] == "onlineAdd":
-            logger.info("{} joined".format(resp["nick"]))
+                case "onlineAdd":
+                    logger.info("{} joined".format(resp["nick"]))
 
-        elif resp["cmd"] == "onlineRemove":
-            logger.info("{} left".format(resp["nick"]))
+                case "onlineRemove":
+                    logger.info("{} left".format(resp["nick"]))
 
-        elif resp["cmd"] == "onlineSet":
-            logger.info("Online: {}".format(", ".join(resp["nicks"])))
-            print("Connected to channel: {}".format(resp["channel"]))
+                case "onlineSet":
+                    logger.info("Online: {}".format(", ".join(resp["nicks"])))
+                    print("Connected to channel: {}".format(resp["channel"]))
 
 # run main()
 if __name__ == "__main__":
