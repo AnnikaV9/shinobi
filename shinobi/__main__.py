@@ -66,6 +66,9 @@ async def receive_loop(ws: object, logger: object) -> None:
                     resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
                     logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
 
+                case "info":
+                    logger.info(resp["text"].replace("\n", "<LB>"))
+
                 case "emote":
                     resp["trip"] = "NOTRIP" if len(resp.get("trip", "")) < 6 else resp.get("trip", "")
                     logger.info("[{}][{}] {}".format(resp["trip"], resp["nick"], resp["text"].replace("\n", "<LB>")))
