@@ -3,7 +3,7 @@ channels:
   - channel2
   - channel3
 
-join_delay: 30
+join_delay: 60
 nick: RANDOM
-password: <trip password>
+password: <tripcode password>
 server: wss://hack.chat/chat-ws
