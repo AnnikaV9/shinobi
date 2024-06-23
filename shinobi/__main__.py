@@ -50,7 +50,7 @@ async def connection(nick: str, channel: str, num_channels: int, server: str, jo
     if num_channels != 0:
         await asyncio.sleep(num_channels * join_delay)
 
-    async with websockets.connect(server) as ws:
+    async with websockets.connect(server, ping_timeout=None) as ws:
         await ws.send(json.dumps({"cmd": "join", "channel": channel, "nick": nick}))
         await asyncio.gather(ping_loop(ws), receive_loop(ws, logger))
 
